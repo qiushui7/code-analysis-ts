@@ -67,7 +67,7 @@
         color: #ffffff;
         white-space: nowrap;
       }
-      .gray-card:hover {
+      #parseError:hover {
         cursor: pointer;
         opacity: 0.8;
       }
@@ -169,7 +169,7 @@
       .version-card:hover {
         cursor: default;
       }
-      #methodMap, #apiMap, #browserMap, #typeMap, #parseErrorInfos, #versionMap {
+      .bl, #methodMap, #apiMap, #browserMap, #typeMap, #parseErrorInfos, #versionMap, #dependenciesInfos {
         padding-top: 10px;
         border-left: 2px solid #d81414;
         padding-left: 10px;
@@ -287,11 +287,20 @@
         </div>
       </div>
       <!--browserMap -->
-      <div class="main_area">
+      <div class="main_area" id="insertNode">
         <div class="api_area">
           <div class="name">Browser APIS：</div>
         </div>
         <div id="browserMap">
+          <!-- -->
+        </div>
+      </div>
+      <!--dependencies-->
+      <div class="main_area">
+        <div class="api_area">
+          <div class="name" style="color:rgb(13, 52, 226);">异常依赖：</div>
+        </div>
+        <div id="dependenciesInfos">
           <!-- -->
         </div>
       </div>
@@ -383,13 +392,37 @@
           document.getElementById('versionArea').style.display = 'none';
         }
       }
+      // 处理dependenciesInfos
+      function doDependencies() {
+        var html = '';
+        if(report.dependenciesWarn){
+          html = html + '<div class="second"><div class="owner">-</div><div class="area">';
+          for(var key in report.dependenciesWarn){
+            if(report.dependenciesWarn.hasOwnProperty(key)){
+              html = html + '<div class="gray-card" >';
+              html = html + '<span style="color:#e9eb0c;">';
+              html = html + key
+              html = html + ' : ';
+              html = html + '</span>';
+              html = html + '依赖：' + report.dependenciesWarn[key].join(',') + '可能未被声明'
+              html = html + '</div>';
+            }
+          }
+          html = html + '</div></div>';
+        }
+        if(html ==''){
+          document.getElementById('dependenciesInfos').innerHTML ='<div class="noContent">-</div>';
+          return;
+        }
+        document.getElementById('dependenciesInfos').innerHTML = html;
+      }
       // 处理parseErrorInfos
       function doParseError() {
         var html = '';
         if(report.parseErrorInfos.length >0){
           html = html + '<div class="second"><div class="owner">-</div><div class="area">';
           report.parseErrorInfos.forEach((element, index) => {
-            html = html + '<div class="gray-card';
+            html = html + '<div id="parseError" class="gray-card';
             html = html + '" onclick="api_show(event)" data-f="';
             html = html + index;
             html = html + '">';
@@ -434,6 +467,12 @@
       }
       // 渲染API表格区域
       function renderApiTable(data, type) {
+        if(!document.getElementById(type)){
+          var i = document.createElement('div')
+          i.setAttribute('class','main_area')
+          i.insertAdjacentHTML('beforeend',`<div class="api_area"><div class="name">${type}</div></div><div class="bl" id="${type}"></div>`)
+          document.getElementById('insertNode').insertAdjacentElement('afterend',i)
+        }
         var html = '';
         Object.keys(data).forEach(element => {
           html = html + '<div class="second"><div class="owner"';
@@ -502,6 +541,7 @@
             renderApiTable(report[item], item);
           })
         }
+        doDependencies();
         doParseError();
         versionRender();
         if(report.scoreMap){
