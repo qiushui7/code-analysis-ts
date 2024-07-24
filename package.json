@@ -1,6 +1,6 @@
 {
   "name": "analysiser-ts",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "a code dependency analysis tool for ts",
   "main": "./api/index.js",
   "module": "./api/index.js",
