@@ -1,8 +1,8 @@
-[![npm version](https://badge.fury.io/js/code-analysis-ts.svg)](https://www.npmjs.com/package/code-analysis-ts)
-[![Downloads](https://img.shields.io/npm/dm/code-analysis-ts.svg)](https://www.npmjs.com/package/code-analysis-ts)
+[![npm version](https://badge.fury.io/js/code-analysis-ts.svg)](https://www.npmjs.com/package/analysiser-ts)
+[![Downloads](https://img.shields.io/npm/dm/code-analysis-ts.svg)](https://www.npmjs.com/package/analysiser-ts)
 # code-analysis-ts
 
-[code-analysis-ts](https://www.npmjs.com/package/code-analysis-ts)是一款前端代码分析工具，用于实现代码调用分析报告，代码评分，代码告警，“脏调用”拦截，API趋势变化分析等应用场景。支持CLI/API两种使用模式，可快速集成到前端工程化体系中，用于解决大型web应用的前端依赖治理难题。
+[code-analysis-ts](https://www.npmjs.com/package/analysiser-ts)是一款前端代码分析工具，用于实现代码调用分析报告，代码评分，代码告警，“脏调用”拦截，API趋势变化分析等应用场景。支持CLI/API两种使用模式，可快速集成到前端工程化体系中，用于解决大型web应用的前端依赖治理难题。
 
 ## Install
 
@@ -31,8 +31,9 @@ function getGitBranch() {                                             // 获取�
 
 module.exports = {
     scanSource: [{                                                    // 必须，待扫描源码的配置信息
-        name: 'Market',                                                    // 必填，项目名称
-        path: ['src'],                                                     // 必填，需要扫描的文件路径（基准路径为配置文件所在路径）
+        name: 'Market',                                                    // 必须，项目名称
+        path: ['src'],                                                     // 必须，需要扫描的文件路径（基准路径为配置文件所在路径）
+        alias: [ '@' ],                                                    // 必须，项目中使用的别名
         packageFile: 'package.json',                                       // 可选，package.json 文件路径配置，用于收集依赖的版本信息
         format: null,                                                      // 可选, 文件路径格式化函数,默认为null,一般不需要配置
         httpRepo: `https://gitlab.xxx.com/xxx/-/blob/${getGitBranch()}/`   // 可选，项目gitlab/github url的访问前缀，用于点击行信息跳转，不填则不跳转
